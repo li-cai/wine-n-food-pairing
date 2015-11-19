@@ -1,0 +1,59 @@
+/*
+ * Web Fonts from fontspring.com
+ *
+ * All OpenType features and all extended glyphs have been removed.
+ * Fully installable fonts can be purchased at http://www.fontspring.com
+ *
+ * The fonts included in this stylesheet are subject to the End User License you purchased
+ * from Fontspring. The fonts are protected under domestic and international trademark and 
+ * copyright law. You are prohibited from modifying, reverse engineering, duplicating, or
+ * distributing this font software.
+ *
+ * (c) 2010-2015 Fontspring
+ *
+ *
+ *
+ *
+ * The fonts included are copyrighted by the vendor listed below.
+ *
+ * Vendor:      The Questa Project
+ * License URL: http://www.fontspring.com/licenses/the-questa-project/webfont
+ *
+ *
+ */
+
+@font-face {
+  font-family: 'Questa Grande';
+  src: url('fonts/2-questa_grande_regular_31-webfont.eot');
+  src: url('fonts/2-questa_grande_regular_31-webfont.eot?#iefix') format('embedded-opentype'),
+       url('fonts/2-questa_grande_regular_31-webfont.woff2') format('woff2'),
+       url('fonts/2-questa_grande_regular_31-webfont.woff') format('woff'),
+       url('fonts/2-questa_grande_regular_31-webfont.ttf') format('truetype'),
+       url('fonts/2-questa_grande_regular_31-webfont.svg#questa_granderegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Questa';
+  src: url('fonts/2-Questa_Regular-webfont.eot');
+  src: url('fonts/2-Questa_Regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('fonts/2-Questa_Regular-webfont.woff2') format('woff2'),
+       url('fonts/2-Questa_Regular-webfont.woff') format('woff'),
+       url('fonts/2-Questa_Regular-webfont.ttf') format('truetype'),
+       url('fonts/2-Questa_Regular-webfont.svg#questaregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Questa Sans';
+  src: url('fonts/2-Questa_Sans_Regular-webfont.eot');
+  src: url('fonts/2-Questa_Sans_Regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('fonts/2-Questa_Sans_Regular-webfont.woff2') format('woff2'),
+       url('fonts/2-Questa_Sans_Regular-webfont.woff') format('woff'),
+       url('fonts/2-Questa_Sans_Regular-webfont.ttf') format('truetype'),
+       url('fonts/2-Questa_Sans_Regular-webfont.svg#questa_sansregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
