@@ -1,3 +1,55 @@
+html, body {
+  height: 100%;
+}
+
 body {
+  margin: 0;
   font-family: 'Questa Sans';
+  background-color: #f9f0de;
+  color: #325577;
+}
+
+.container {
+  position: relative;
+  width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 2%;
+  box-sizing: border-box;
+}
+
+.title {
+  font-family: 'Questa';
+  font-size: 30px;
+  text-align: center;
+}
+
+/*.wineRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}*/
+
+.wineRow {
+  width: 100%;
+  text-align: center;
+}
+
+.wineRowItem {
+  display: inline-block;
+  margin-right: 50px;
+}
+
+.wineRowItem:last-child {
+  margin-right: 0;
+}
+
+.wineIcon {
+  width: 85%;
+}
+
+.wineLabel {
+  font-size: 14px;
+  margin-top: 10px;
 }
