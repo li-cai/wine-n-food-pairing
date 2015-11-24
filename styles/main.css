@@ -14,7 +14,7 @@ body {
   width: 1200px;
   height: 100%;
   margin: 0 auto;
-  padding: 2%;
+  padding: 13px;
   box-sizing: border-box;
 }
 
@@ -77,4 +77,48 @@ body {
 .foodLabel {
   font-size: 12px;
   margin-bottom: 12px;
+}
+
+
+/* MODALS */
+
+#recipeModal {
+  display: none;
+  position: absolute;
+  top: 78px;
+  left: 262px;
+  bottom: 60px;
+  width: 40%;
+  min-width: 400px;
+  max-width: 600px;
+  padding: 30px;
+  background-color: #5C97BF;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+
+#recipeHeading {
+  font-family: 'Questa';
+  font-size: 26px;
+  line-height: 1;
+  color: white;
+  opacity: 0.8;
+}
+
+#backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #242e35;
+  opacity: 0.88;
+}
+
+.selectedItemCopy {
+  display: none;
+  position: absolute;
+  text-align: center;
+  color: white;
 }

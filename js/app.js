@@ -16,16 +16,83 @@ app.main = {
     YUMMLY_API_KEY: '670a6497e397e2f8837a536ce46019ea',
     SNOOTH_API_URL: 'http://api.snooth.com/wines/?akey=',
     SNOOTH_API_KEY: 'scvnwdnxu9kvwl2aylpnz8dohqczmownq9h75igbrzur1i67',
+    selectedItem: null,
+    currentModal: null,
 
     init: function() {
         var that = this;
 
         var foods = $('#foodRow').children();
+
         $.each(foods, function(index, food) {
             $(food).click(function() {
-                that.getRecipe($(this).attr('value'));
+                var foodValue = $(this).attr('value');
+
+                // that.getRecipe(foodValue);
+
+                $('#recipeHeading').text(foodValue + ' Recipes');
+
+                that.currentModal = '#recipeModal';
+                that.selectedItem = this;
+                that.displaySelectedItem();
+                that.positionModal();
+
+                $('#backdrop').fadeIn();
+                $('#recipeModal').fadeIn();
             });
         });
+
+        $('#backdrop').click(function() {
+            $('#backdrop').fadeOut();
+            $(that.currentModal).fadeOut();
+            $('#' + that.getCopyId()).fadeOut();
+
+            that.selectedItem = null;
+            that.currentModal = null;
+        });
+
+        $(window).resize(function() {
+            if (that.currentModal && that.selectedItem) {
+                that.displaySelectedItem();
+                that.positionModal();
+            }
+        });
+    },
+
+    displaySelectedItem: function() {
+        var copyIdName = this.getCopyId();
+        var copyId = '#' + copyIdName;
+        var itemOffset = $(this.selectedItem).offset();
+        
+        if (!$(copyId).length) {
+            var copyElement = $(this.selectedItem).clone();
+            $(copyElement).attr({
+                'id': copyIdName,
+                'class': 'selectedItemCopy'
+            });
+
+            $('body').append($(copyElement));
+        }
+
+        $(copyId).css({top: itemOffset.top, left: itemOffset.left});
+        $(copyId).fadeIn();
+    },
+
+    positionModal: function() {
+        var itemOffset = $(this.selectedItem).offset();
+        var itemPosition = $(this.selectedItem).position();
+        var modalWidth = $(this.currentModal).width();
+
+        var adjustmentFactor = itemPosition.left < 550 ? 100 : -85 - modalWidth;
+
+        $(this.currentModal).css({
+            top: itemOffset.top,
+            left: itemOffset.left + adjustmentFactor
+        });
+    },
+
+    getCopyId: function() {
+        return $(this.selectedItem).attr('id') + 'Copy';
     },
 
     getRecipe: function(searchTerm) {
@@ -41,7 +108,7 @@ app.main = {
     getData: function(url, searchTerm, callback) {
         url += '&q=' + encodeURI(searchTerm);
 
-        console.log(url);
+        // console.log(url);
 
         $.ajax({
             dataType: 'json',
@@ -52,7 +119,7 @@ app.main = {
     },
 
     recipeLoaded: function(response) {
-        console.log(JSON.stringify(response));
+        // console.log(JSON.stringify(response));
     }
 }
 
