@@ -82,27 +82,30 @@ body {
 
 /* MODALS */
 
-#recipeModal {
+.modal {
   display: none;
   position: absolute;
-  top: 78px;
-  left: 262px;
   bottom: 60px;
-  width: 40%;
-  min-width: 400px;
-  max-width: 600px;
-  padding: 30px;
-  background-color: #5C97BF;
-  box-sizing: border-box;
-  border-radius: 4px;
+  width: 480px;
+  min-height: 195px;
 }
 
-#recipeHeading {
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  color: rgba(255, 255, 255, 0.7);
+  background-color: #5C97BF;
+  border-radius: 4px;
+  line-height: 1;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.modalHeading {
   font-family: 'Questa';
   font-size: 26px;
-  line-height: 1;
-  color: white;
-  opacity: 0.8;
+  height: 26px;
+  padding: 30px;
 }
 
 #backdrop {
@@ -121,4 +124,52 @@ body {
   position: absolute;
   text-align: center;
   color: white;
+}
+
+
+/* RESULTS */
+
+.modalResults {
+  flex: 1 1 auto;
+  padding: 0 30px;
+  line-height: 1;
+  overflow-y: auto;
+}
+
+.modalResult {
+  display: flex;
+  height: 85px;
+  margin-bottom: 28px;
+}
+
+.resultImage {
+  flex: 0 0 85px;
+  height: 100%;
+  background-color: #76aed3;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-radius: 4px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.resultDetail {
+  flex: 1 1 auto;
+  height: 100%;
+  overflow: hidden;
+}
+
+.resultDetail > a {
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.resultInfo {
+  margin: 7px 0;
+  font-size: 17px;
+}
+
+.resultInfo, .resultIngredients {
+  opacity: 0.5;
 }

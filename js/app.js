@@ -28,7 +28,7 @@ app.main = {
             $(food).click(function() {
                 var foodValue = $(this).attr('value');
 
-                // that.getRecipe(foodValue);
+                that.getRecipe(foodValue);
 
                 $('#recipeHeading').text(foodValue + ' Recipes');
 
@@ -83,7 +83,7 @@ app.main = {
         var itemPosition = $(this.selectedItem).position();
         var modalWidth = $(this.currentModal).width();
 
-        var adjustmentFactor = itemPosition.left < 550 ? 100 : -85 - modalWidth;
+        var adjustmentFactor = itemPosition.left < 550 ? 100 : -20 - modalWidth;
 
         $(this.currentModal).css({
             top: itemOffset.top,
@@ -119,7 +119,52 @@ app.main = {
     },
 
     recipeLoaded: function(response) {
-        // console.log(JSON.stringify(response));
+        var recipes = response.matches;
+        console.log(recipes);
+
+        $('#recipeResults').empty();
+
+        // create result element
+        $.each(recipes, function(index, recipe) {
+            console.log(recipe);
+            var resultElement = document.createElement('div');
+            $(resultElement).addClass('modalResult');
+            
+            var resultImage = document.createElement('div');
+            $(resultImage).addClass('resultImage');
+            if (recipe.smallImageUrls.length > 0) {
+                $(resultImage).css(
+                    'background-image', 
+                    'url(' + recipe.smallImageUrls[0] + ')'
+                );
+            }
+            $(resultElement).append($(resultImage));
+
+            var resultDetail = document.createElement('div');
+            $(resultDetail).addClass('resultDetail');
+
+            var resultLink = document.createElement('a');
+            $(resultLink).text(recipe.recipeName);
+            $(resultDetail).append($(resultLink));
+
+            var resultInfo = document.createElement('div');
+            $(resultInfo).addClass('resultInfo');
+            $(resultInfo).text(String.format(
+                '{0} Ingredients. {1} Minutes',
+                recipe.ingredients.length,
+                recipe.totalTimeInSeconds / 60
+            ));
+            $(resultDetail).append($(resultInfo));
+
+            var resultIngredients = document.createElement('div');
+            $(resultIngredients).addClass('resultIngredients');
+            $(resultIngredients).text(recipe.ingredients.join(', '));
+            $(resultDetail).append($(resultIngredients));
+
+            $(resultElement).append($(resultDetail));
+
+            $('#recipeResults').append($(resultElement));
+        });
     }
 }
 
