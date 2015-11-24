@@ -36,7 +36,7 @@ body {
   align-items: flex-end;
 }*/
 
-.wineRow, .foodRow {
+#wineRow, #foodRow {
   width: 100%;
   text-align: center;
 }
@@ -59,22 +59,22 @@ body {
   margin-top: 10px;
 }
 
-.foodRow {
+#foodRow {
   margin-top: 35px;
 }
 
 .foodRowItem {
   display: inline-block;
   vertical-align: top;
-  margin-right: 15px;
+  margin-right: 20px;
   cursor: pointer;
 }
 
 .foodIcon {
-  max-width: 80px;
+  max-width: 75px;
 }
 
 .foodLabel {
   font-size: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }

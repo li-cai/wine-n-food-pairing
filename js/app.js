@@ -20,27 +20,26 @@ app.main = {
     init: function() {
         var that = this;
 
-        $('#fish').click(function() {
-            that.getData('fish');
-        });
-
-        $('#cabbage').click(function() {
-            that.getData('vegetables');
-        });
-
-        $('#cheese').click(function() {
-            that.getData('cheese');
+        var foods = $('#foodRow').children();
+        $.each(foods, function(index, food) {
+            $(food).click(function() {
+                that.getRecipe($(this).attr('value'));
+            });
         });
     },
 
-    getData: function(searchTerm) {
+    getRecipe: function(searchTerm) {
         var url = String.format(
             this.YUMMLY_API_URL,
             this.YUMMLY_API_ID,
             this.YUMMLY_API_KEY
         );
 
-        url += '&?q=' + encodeURI(searchTerm);
+        this.getData(url, searchTerm, this.recipeLoaded);
+    },
+
+    getData: function(url, searchTerm, callback) {
+        url += '&q=' + encodeURI(searchTerm);
 
         console.log(url);
 
@@ -48,11 +47,11 @@ app.main = {
             dataType: 'json',
             url: url,
             data: null,
-            success: this.jsonLoaded,
-        })
+            success: callback,
+        });
     },
 
-    jsonLoaded: function(response) {
+    recipeLoaded: function(response) {
         console.log(JSON.stringify(response));
     }
 }
