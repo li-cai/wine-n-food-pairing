@@ -105,6 +105,10 @@ app.main = {
         this.getData(url, searchTerm, this.recipeLoaded);
     },
 
+    getWine: function(searchTerm) {
+        
+    },
+
     getData: function(url, searchTerm, callback) {
         url += '&q=' + encodeURI(searchTerm);
 
