@@ -23,32 +23,31 @@ app.main = {
         var that = this;
 
         var foods = $('#foodRow').children();
-
         $.each(foods, function(index, food) {
             $(food).click(function() {
                 var foodValue = $(this).attr('value');
+                $('#modalHeading').text(foodValue + ' Recipes');
 
                 that.getRecipe(foodValue);
 
-                $('#recipeHeading').text(foodValue + ' Recipes');
-
-                that.currentModal = '#recipeModal';
                 that.selectedItem = this;
-                that.displaySelectedItem();
-                that.positionModal();
-
-                $('#backdrop').fadeIn();
-                $('#recipeModal').fadeIn();
+                that.showModal();
             });
         });
 
-        $('#backdrop').click(function() {
-            $('#backdrop').fadeOut();
-            $(that.currentModal).fadeOut();
-            $('#' + that.getCopyId()).fadeOut();
+        var varietals = $('.wineVarietals').children();
+        $.each(varietals, function(index, varietal) {
+            $(varietal).click(function() {
+                var varietalValue = $(this).attr('value');
+                $('#modalHeading').text(varietalValue);
 
-            that.selectedItem = null;
-            that.currentModal = null;
+                that.selectedItem = $(this).parent().parent();
+                that.showModal();
+            });           
+        });
+
+        $('#backdrop').click(function() {
+            that.hideModal();
         });
 
         $(window).resize(function() {
@@ -59,8 +58,28 @@ app.main = {
         });
     },
 
+    showModal: function() {
+        this.currentModal = '#resultsModal';
+
+        this.displaySelectedItem();
+        this.positionModal();
+
+        $('#backdrop').fadeIn();
+        $('#resultsModal').fadeIn();
+    },
+
+    hideModal: function() {
+        $('#backdrop').fadeOut();
+        $(this.currentModal).fadeOut();
+        $('#' + this.getCopyId()).fadeOut();
+
+        this.selectedItem = null;
+        this.currentModal = null;
+    },
+
     displaySelectedItem: function() {
         var copyIdName = this.getCopyId();
+        console.log(copyIdName);
         var copyId = '#' + copyIdName;
         var itemOffset = $(this.selectedItem).offset();
         
@@ -86,7 +105,7 @@ app.main = {
         var adjustmentFactor = itemPosition.left < 550 ? 100 : -20 - modalWidth;
 
         $(this.currentModal).css({
-            top: itemOffset.top,
+            top: 75,
             left: itemOffset.left + adjustmentFactor
         });
     },
@@ -106,7 +125,7 @@ app.main = {
     },
 
     getWine: function(searchTerm) {
-        
+
     },
 
     getData: function(url, searchTerm, callback) {

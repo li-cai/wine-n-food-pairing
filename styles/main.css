@@ -125,7 +125,7 @@ body {
   box-sizing: border-box;
 }
 
-.modalHeading {
+#modalHeading {
   font-family: 'Questa';
   font-size: 26px;
   height: 26px;
