@@ -9,7 +9,14 @@ body {
   color: #325577;
 }
 
+a {
+  text-decoration: none;
+  color: white;
+}
+
 .container {
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 1200px;
   height: 100%;
@@ -25,8 +32,8 @@ body {
 }
 
 .canvasContainer {
+  flex: 1 1 auto;
   width: 100%;
-  height: 18%;
 }
 
 /*.wineRow {
@@ -35,6 +42,10 @@ body {
   justify-content: space-between;
   align-items: flex-end;
 }*/
+
+#wineRow {
+  padding-bottom: 8px;
+}
 
 #wineRow, #foodRow {
   width: 100%;
@@ -84,7 +95,7 @@ body {
 }
 
 #foodRow {
-  margin-top: 35px;
+  margin-top: 25px;
 }
 
 .foodRowItem {
@@ -109,7 +120,7 @@ body {
 .modal {
   display: none;
   position: absolute;
-  bottom: 60px;
+  bottom: 25px;
   width: 480px;
   min-height: 195px;
 }
@@ -153,7 +164,7 @@ body {
 
 /* RESULTS */
 
-.modalResults {
+#modalResults {
   flex: 1 1 auto;
   padding: 0 30px;
   line-height: 1;
@@ -185,8 +196,11 @@ body {
 }
 
 .resultDetail > a {
+  display: block;
+  padding-top: 1px;
   font-size: 19px;
   cursor: pointer;
+  color: inherit;
 }
 
 .resultInfo {

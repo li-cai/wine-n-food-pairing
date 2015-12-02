@@ -41,6 +41,8 @@ app.main = {
                 var varietalValue = $(this).attr('value');
                 $('#modalHeading').text(varietalValue);
 
+                that.getWine(varietalValue);
+
                 that.selectedItem = $(this).parent().parent();
                 that.showModal();
             });           
@@ -72,6 +74,7 @@ app.main = {
         $('#backdrop').fadeOut();
         $(this.currentModal).fadeOut();
         $('#' + this.getCopyId()).fadeOut();
+        $('#modalResults').empty();
 
         this.selectedItem = null;
         this.currentModal = null;
@@ -121,17 +124,17 @@ app.main = {
             this.YUMMLY_API_KEY
         );
 
-        this.getData(url, searchTerm, this.recipeLoaded);
+        this.getData(url, searchTerm, this.recipeLoaded.bind(this));
     },
 
     getWine: function(searchTerm) {
+        var url = this.SNOOTH_API_URL + this.SNOOTH_API_KEY;
 
+        this.getData(url, searchTerm, this.winesLoaded.bind(this));
     },
 
     getData: function(url, searchTerm, callback) {
         url += '&q=' + encodeURI(searchTerm);
-
-        // console.log(url);
 
         $.ajax({
             dataType: 'json',
@@ -141,54 +144,97 @@ app.main = {
         });
     },
 
+    populateModalResult: function(imageUrl, link, title, section1, section2) {
+        var resultElement = document.createElement('div');
+        $(resultElement).addClass('modalResult');
+        
+        var resultImage = document.createElement('div');
+        $(resultImage).addClass('resultImage');
+        if (imageUrl) {
+            $(resultImage).css(
+                'background-image', 
+                'url(' + imageUrl + ')'
+            );
+        }
+        $(resultElement).append($(resultImage));
+
+        var resultDetail = document.createElement('div');
+        $(resultDetail).addClass('resultDetail');
+
+        var resultLink = document.createElement('a');
+        $(resultLink).text(title);
+        if (link) {
+            $(resultLink).attr({
+                'href': link,
+                'target': '_blank'
+            });
+        }
+        $(resultDetail).append($(resultLink));
+
+        var resultInfo = document.createElement('div');
+        $(resultInfo).addClass('resultInfo');
+        $(resultInfo).text(section1);
+        $(resultDetail).append($(resultInfo));
+
+        var resultIngredients = document.createElement('div');
+        $(resultIngredients).addClass('resultIngredients');
+        $(resultIngredients).text(section2);
+        $(resultDetail).append($(resultIngredients));
+
+        $(resultElement).append($(resultDetail));
+
+        $('#modalResults').append($(resultElement));
+
+        return resultElement;     
+    },
+
+    winesLoaded: function(response) {
+        var wines = response.wines;
+        var that = this;
+
+        console.log(wines);
+
+        $.each(wines, function(index, wine) {
+            var imageUrl = wine.image ? wine.image : null;
+            var link = wine.link;
+            var title = wine.name;
+            var section1 = '$' + wine.price + ' ' + wine.region;
+            var section2 = wine.varietal;
+
+            var resultElement = that.populateModalResult(
+                imageUrl, link, title, section1, section2
+            );
+
+            $(resultElement).click(function() {
+                console.log('hallo');
+            });
+        });
+    },
+
     recipeLoaded: function(response) {
         var recipes = response.matches;
-        console.log(recipes);
-
-        $('#recipeResults').empty();
+        var that = this;
 
         // create result element
         $.each(recipes, function(index, recipe) {
-            console.log(recipe);
-            var resultElement = document.createElement('div');
-            $(resultElement).addClass('modalResult');
-            
-            var resultImage = document.createElement('div');
-            $(resultImage).addClass('resultImage');
+            var imageUrl;
             if (recipe.smallImageUrls.length > 0) {
-                $(resultImage).css(
-                    'background-image', 
-                    'url(' + recipe.smallImageUrls[0] + ')'
-                );
+                imageUrl = recipe.smallImageUrls[0];
             }
-            $(resultElement).append($(resultImage));
 
-            var resultDetail = document.createElement('div');
-            $(resultDetail).addClass('resultDetail');
+            var title = recipe.recipeName;
 
-            var resultLink = document.createElement('a');
-            $(resultLink).text(recipe.recipeName);
-            $(resultDetail).append($(resultLink));
-
-            var resultInfo = document.createElement('div');
-            $(resultInfo).addClass('resultInfo');
-            $(resultInfo).text(String.format(
+            var section1 = String.format(
                 '{0} Ingredients. {1} Minutes',
                 recipe.ingredients.length,
                 recipe.totalTimeInSeconds / 60
-            ));
-            $(resultDetail).append($(resultInfo));
+            );
 
-            var resultIngredients = document.createElement('div');
-            $(resultIngredients).addClass('resultIngredients');
-            $(resultIngredients).text(recipe.ingredients.join(', '));
-            $(resultDetail).append($(resultIngredients));
+            var section2 = recipe.ingredients.join(', ');
 
-            $(resultElement).append($(resultDetail));
-
-            $('#recipeResults').append($(resultElement));
+            that.populateModalResult(imageUrl, null, title, section1, section2);
         });
-    }
+    },
 }
 
 /* http://stackoverflow.com/questions/610406/ */
