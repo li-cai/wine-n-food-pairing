@@ -9,56 +9,80 @@ var app = app || {};
 app.canvasModule = (function() {
     var animationId = 0,
         WINE_FOOD_MAP = {
-            '#sparkling': [
-                '#fish', 
-                '#bread', 
-                '#hardcheese', 
-                '#cheese', 
-                '#cabbage'
-            ],
-            '#drywhite': [
+            '#sparkling': {
+                color: '#7eb9ab',
+                pairings: [
+                    '#fish', 
+                    '#bread', 
+                    '#hardcheese', 
+                    '#cheese', 
+                    '#cabbage'
+                ],
+            },
+            '#drywhite': {
+                color: '#7e875a',
+                pairings: [
                 '#cabbage',
                 '#kebab',
                 '#fish'
-            ],
-            '#sweetwhite': [
-                '#cheese',
-                '#hardcheese',
-                '#salami',
-                '#cupcake'
-            ],
-            '#richwhite': [
-                '#cheese',
-                '#bread',
-                '#fish',
-                '#crab',
-                '#chicken'
-            ],
-            '#dessertwine': [
-                '#cupcake',
-                '#bread',
-                '#salami'
-            ],
-            '#lightred': [
-                '#crab',
-                '#bread',
-                '#chicken',
-                '#kebab'
-            ],
-            '#mediumred': [
-                '#kebab',
-                '#cheese',
-                '#bread',
-                '#chicken',
-                '#steak',
-                '#salami'
-            ],
-            '#boldred': [
-                '#bread',
-                '#hardcheese',
-                '#steak',
-                '#salami'
-            ],
+                ],
+            },
+            '#sweetwhite': {
+                color: '#7e875a',
+                pairings: [
+                    '#cheese',
+                    '#hardcheese',
+                    '#salami',
+                    '#cupcake'
+                ],
+            },
+            '#richwhite': {
+                color: '#dab153',
+                pairings: [
+                    '#cheese',
+                    '#bread',
+                    '#fish',
+                    '#crab',
+                    '#chicken'
+                ],
+            },
+            '#dessertwine': {
+                color: '#e58423', 
+                pairings: [
+                    '#cupcake',
+                    '#bread',
+                    '#salami'
+                ],
+            },
+            '#lightred': {
+                color: '#f04e26', 
+                pairings: [
+                    '#crab',
+                    '#bread',
+                    '#chicken',
+                    '#kebab'
+                ],
+            },
+            '#mediumred': {
+                color: '#a73f12',
+                pairings: [
+                    '#kebab',
+                    '#cheese',
+                    '#bread',
+                    '#chicken',
+                    '#steak',
+                    '#salami'
+                ],
+            },
+            '#boldred': {
+                color: '#96370a', 
+                pairings: [
+                    '#bread',
+                    '#hardcheese',
+                    '#steak',
+                    '#salami'
+                ],
+            }
         },
         TOP_OFFSET = 15,
         BOTTOM_OFFSET = 10,
@@ -72,8 +96,8 @@ app.canvasModule = (function() {
     }
 
     function draw() {
-        $.each(WINE_FOOD_MAP, function(wineID, foods) {
-            $.each(foods, function(index, foodID) {
+        $.each(WINE_FOOD_MAP, function(wineID, attributes) {
+            $.each(attributes.pairings, function(index, foodID) {
                 var x1 = calculateLeft(wineID) - 12;
                 var y1 = canvas.height - BOTTOM_OFFSET;
                 var x2 = calculateLeft(foodID) - 15;
