@@ -7,6 +7,7 @@
 var app = app || {};
 
 window.onload = function() {
+    app.main.canvasModule = app.canvasModule;
     app.main.init();
 }
 
@@ -18,9 +19,13 @@ app.main = {
     SNOOTH_API_KEY: 'scvnwdnxu9kvwl2aylpnz8dohqczmownq9h75igbrzur1i67',
     selectedItem: null,
     currentModal: null,
+    canvasModule: null,
 
     init: function() {
         var that = this;
+
+        console.log(this.canvasModule);
+        this.canvasModule.init();
 
         var foods = $('#foodRow').children();
         $.each(foods, function(index, food) {
