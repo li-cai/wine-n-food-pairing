@@ -84,8 +84,8 @@ app.canvasModule = (function() {
                 ],
             }
         },
-        TOP_OFFSET = 15,
-        BOTTOM_OFFSET = 10,
+        TOP_OFFSET = 25,
+        BOTTOM_OFFSET = 370,
         canvas, ctx;
 
     function init() {
@@ -99,10 +99,11 @@ app.canvasModule = (function() {
         $.each(WINE_FOOD_MAP, function(wineID, attributes) {
             $.each(attributes.pairings, function(index, foodID) {
                 var x1 = calculateLeft(wineID) - 12;
-                var y1 = canvas.height - BOTTOM_OFFSET;
+                var y1 = canvas.height + calculateTop(wineID);
                 var x2 = calculateLeft(foodID) - 15;
                 var y2 = TOP_OFFSET;
 
+                ctx.strokeStyle = attributes.color;
                 drawConnection(x1, y1, x2, y2);                
             });
         });
@@ -117,8 +118,7 @@ app.canvasModule = (function() {
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.closePath();
-
-        ctx.strokeStyle = 'mediumSeaGreen';
+        ctx.lineWidth = 2;
         ctx.stroke();
     }
 
@@ -131,6 +131,10 @@ app.canvasModule = (function() {
 
     function calculateLeft(id) {
         return $(id).position().left + ($(id).width() / 2);
+    }
+
+    function calculateTop(id) {
+        return $(id).position().top - BOTTOM_OFFSET;
     }
 
     return {
