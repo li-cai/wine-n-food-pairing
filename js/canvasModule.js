@@ -84,8 +84,12 @@ app.canvasModule = (function() {
                 ],
             }
         },
-        TOP_OFFSET = 25,
-        BOTTOM_OFFSET = 370,
+        foodMap = {},
+        FOOD_X_SPACING = 10,
+        FOOD_X_OFFSET = 15,
+        FOOD_Y_OFFSET = 25,
+        WINE_X_OFFSET = 12,
+        WINE_Y_OFFSET = 370,
         canvas, ctx;
 
     function init() {
@@ -96,21 +100,22 @@ app.canvasModule = (function() {
     }
 
     function draw() {
+        foodMap = {};
+
         $.each(WINE_FOOD_MAP, function(wineID, attributes) {
             $.each(attributes.pairings, function(index, foodID) {
-                var x1 = calculateLeft(wineID) - 12;
-                var y1 = canvas.height + calculateTop(wineID);
-                var x2 = calculateLeft(foodID) - 15;
-                var y2 = TOP_OFFSET;
+                var x1 = calculateWineX(wineID);
+                var y1 = calculateWineY(wineID);
+                var x2 = calculateFoodX(foodID);
+                var y2 = calculateFoodY(foodID);
 
                 ctx.strokeStyle = attributes.color;
-                drawConnection(x1, y1, x2, y2);                
+                ctx.fillStyle = attributes.color;
+
+                drawConnection(x1, y1, x2, y2);
+                drawDot(x2, y2, 4);
             });
         });
-
-        // ctx.beginPath();
-        // ctx.arc(left, canvas.height - 10, 1, 0, Math.PI * 2, false);
-        // ctx.closePath();
     }
 
     function drawConnection(x1, y1, x2, y2) {
@@ -122,6 +127,13 @@ app.canvasModule = (function() {
         ctx.stroke();
     }
 
+    function drawDot(x, y, r) {
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2, false);
+        ctx.closePath();
+        ctx.fill();
+    }
+
     function update() {
         animationId = requestAnimationFrame(update.bind(this));
 
@@ -129,12 +141,36 @@ app.canvasModule = (function() {
         draw();
     }
 
-    function calculateLeft(id) {
+    function calculateCenterX(id) {
         return $(id).position().left + ($(id).width() / 2);
     }
 
-    function calculateTop(id) {
-        return $(id).position().top - BOTTOM_OFFSET;
+    function calculateWineX(id) {
+        return calculateCenterX(id) - WINE_X_OFFSET;
+    }
+
+    function calculateWineY(id) {
+        var offset = $('#dessertwine').position().top + 2;
+        return canvas.height + $(id).position().top - offset;
+    }
+
+    function calculateFoodX(id) {
+        var offset = FOOD_X_SPACING;
+
+        if (foodMap[id]) {
+            foodMap[id] += 1;
+        } else {
+            foodMap[id] = 1;
+        }
+
+        offset *= foodMap[id] % 2 == 0 ? 1 : -1;
+        offset *= Math.floor(foodMap[id] / 2);
+
+        return calculateCenterX(id) - FOOD_X_OFFSET + offset;
+    }
+
+    function calculateFoodY(id) {
+        return FOOD_Y_OFFSET;
     }
 
     return {
