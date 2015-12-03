@@ -65,6 +65,10 @@ app.main = {
             });           
         });
 
+        $('#graphIcon').click(function() {
+            $('canvas').fadeToggle();
+        });
+
         $('#backdrop').click(function() {
             self.hideModal();
         });
