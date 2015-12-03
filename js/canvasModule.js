@@ -9,6 +9,16 @@ var app = app || {};
 app.canvasModule = (function() {
     var animationId = 0,
         WINE_FOOD_MAP = {
+            '#sparkling': {
+                color: '#7eb9ab',
+                pairings: [
+                    '#fish',
+                    '#bread',
+                    '#hardcheese',
+                    '#cheese',
+                    '#cabbage'
+                ],
+            },
             '#drywhite': {
                 color: '#7e875a',
                 pairings: [
@@ -62,16 +72,6 @@ app.canvasModule = (function() {
                     '#chicken',
                     '#steak',
                     '#salami'
-                ],
-            },
-            '#sparkling': {
-                color: '#7eb9ab',
-                pairings: [
-                    '#fish',
-                    '#bread',
-                    '#hardcheese',
-                    '#cheese',
-                    '#cabbage'
                 ],
             },
             '#boldred': {
@@ -163,10 +163,9 @@ app.canvasModule = (function() {
             foodMap[id] = 1;
         }
 
-        offset *= foodMap[id] % 2 == 0 ? 1 : -1;
-        offset *= Math.floor(foodMap[id] / 2);
+        offset *= foodMap[id];
 
-        return calculateCenterX(id) - FOOD_X_OFFSET + offset;
+        return $(id).position().left + offset;
     }
 
     function calculateFoodY(id) {
