@@ -41,13 +41,6 @@ canvas {
   width: 100%;
 }
 
-/*.wineRow {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-end;
-}*/
-
 #wineRow {
   padding-bottom: 8px;
 }
@@ -93,6 +86,10 @@ canvas {
   cursor: pointer;
   color: rgba(255, 255, 255, 0.4);
   transition: all 0.2s ease;
+}
+
+.wineVarietals > li.is-selected {
+  color: white;
 }
 
 .wineVarietals > li:hover {

@@ -21,6 +21,8 @@ app.main = {
     SNOOTH_API_URL: 'http://api.snooth.com/wines/?akey=',
     SNOOTH_API_KEY: 'scvnwdnxu9kvwl2aylpnz8dohqczmownq9h75igbrzur1i67',
     selectedItem: null,
+    selectedVarietal: null,
+    selectedVarietalCopy: null,
     currentModal: null,
     canvasModule: null,
 
@@ -53,6 +55,7 @@ app.main = {
                 self.getWine(varietalValue);
 
                 self.selectedItem = $(this).parent().parent();
+                self.selectedVarietal = this;
                 self.showModal();
             });           
         });
@@ -92,6 +95,7 @@ app.main = {
     },
 
     displaySelectedItem: function() {
+        var self = this;
         var copyIdName = this.getCopyId();
         var copyId = '#' + copyIdName;
         var itemOffset = $(this.selectedItem).offset();
@@ -109,22 +113,33 @@ app.main = {
         var firstChild = $(copyId).children().first();
         if ($(firstChild).hasClass('wineVarietals')) {
             var varietals = $(firstChild).children();
-            this.handleVarietalClick(varietals);
+            $.each(varietals, function(index, varietal) {
+                if ($(varietal).attr('value') === $(self.selectedVarietal).attr('value')) {
+                    self.toggleSelectedVarietal(varietal);
+                }
+                self.handleVarietalClick(varietal);
+            });
         }
 
         $(copyId).css({top: itemOffset.top, left: itemOffset.left});
         $(copyId).fadeIn();
     },
 
-    handleVarietalClick: function(varietals) {
+    toggleSelectedVarietal: function(selected) {
+        $(this.selectedVarietalCopy).removeClass('is-selected');
+        $(selected).addClass('is-selected');
+        this.selectedVarietalCopy = selected;
+    },
+
+    handleVarietalClick: function(varietal) {
         var self = this;
-        $.each(varietals, function(index, varietal) {
-            $(varietal).click(function() {
-                var varietalValue = $(this).attr('value');
-                $('#modalHeading').text(varietalValue);
-                $('#modalResults').fadeOut();
-                self.getWine(varietalValue);
-            });
+        $(varietal).click(function() {
+            self.toggleSelectedVarietal(this);
+
+            var varietalValue = $(this).attr('value');
+            $('#modalHeading').text(varietalValue);
+            $('#modalResults').fadeOut();
+            self.getWine(varietalValue);
         });
     },
 
