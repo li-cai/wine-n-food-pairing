@@ -69,6 +69,8 @@ app.main = {
         });
     },
 
+
+
     showModal: function() {
         this.currentModal = '#resultsModal';
 
@@ -91,7 +93,6 @@ app.main = {
 
     displaySelectedItem: function() {
         var copyIdName = this.getCopyId();
-        console.log(copyIdName);
         var copyId = '#' + copyIdName;
         var itemOffset = $(this.selectedItem).offset();
         
@@ -105,8 +106,26 @@ app.main = {
             $('body').append($(copyElement));
         }
 
+        var firstChild = $(copyId).children().first();
+        if ($(firstChild).hasClass('wineVarietals')) {
+            var varietals = $(firstChild).children();
+            this.handleVarietalClick(varietals);
+        }
+
         $(copyId).css({top: itemOffset.top, left: itemOffset.left});
         $(copyId).fadeIn();
+    },
+
+    handleVarietalClick: function(varietals) {
+        var self = this;
+        $.each(varietals, function(index, varietal) {
+            $(varietal).click(function() {
+                var varietalValue = $(this).attr('value');
+                $('#modalHeading').text(varietalValue);
+                $('#modalResults').fadeOut();
+                self.getWine(varietalValue);
+            });
+        });
     },
 
     positionModal: function() {
@@ -165,8 +184,10 @@ app.main = {
             var imageUrl = wine.image ? wine.image : null;
             var link = wine.link;
             var title = wine.name;
-            var section1 = '$' + wine.price + ' ' + wine.region;
-            var section2 = wine.varietal;
+            var section1 = '$' + wine.price + ' ' + wine.varietal;
+            var section2 = wine.vintage + ' ' + wine.region.replace(/ >/g, ',');
+
+            $('#modalResults').fadeIn();
 
             var resultElement = self.populateModalResult(
                 null, imageUrl, link, title, section1, section2
@@ -239,7 +260,7 @@ app.main = {
                 'target': '_blank'
             });
         } else {
-            this.addClickHandler(resultLink, id);
+            this.handleRecipeLinkClick(resultLink, id);
         }
         $(resultDetail).append($(resultLink));
 
@@ -260,7 +281,7 @@ app.main = {
         return resultElement;     
     },
 
-    addClickHandler: function(element, recipeId) {
+    handleRecipeLinkClick: function(element, recipeId) {
         var self = this;
         var url = this.YUMMLY_API_URL + this.YUMMLY_API_GET + recipeId;
         url += String.format(
