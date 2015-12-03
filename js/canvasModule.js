@@ -9,16 +9,6 @@ var app = app || {};
 app.canvasModule = (function() {
     var animationId = 0,
         WINE_FOOD_MAP = {
-            '#sparkling': {
-                color: '#7eb9ab',
-                pairings: [
-                    '#fish', 
-                    '#bread', 
-                    '#hardcheese', 
-                    '#cheese', 
-                    '#cabbage'
-                ],
-            },
             '#drywhite': {
                 color: '#7e875a',
                 pairings: [
@@ -74,6 +64,16 @@ app.canvasModule = (function() {
                     '#salami'
                 ],
             },
+            '#sparkling': {
+                color: '#7eb9ab',
+                pairings: [
+                    '#fish',
+                    '#bread',
+                    '#hardcheese',
+                    '#cheese',
+                    '#cabbage'
+                ],
+            },
             '#boldred': {
                 color: '#96370a', 
                 pairings: [
@@ -82,7 +82,7 @@ app.canvasModule = (function() {
                     '#steak',
                     '#salami'
                 ],
-            }
+            },
         },
         foodMap = {},
         FOOD_X_SPACING = 10,
