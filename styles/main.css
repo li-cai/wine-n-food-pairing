@@ -3,6 +3,7 @@ html, body {
 }
 
 body {
+  display: none;
   margin: 0;
   font-family: 'Questa Sans';
   background-color: #f9f0de;

@@ -12,7 +12,10 @@ window.onload = function() {
 }
 
 app.main = {
-    YUMMLY_API_URL: 'http://api.yummly.com/v1/api/recipes?_app_id={0}&_app_key={1}',
+    YUMMLY_API_URL: 'http://api.yummly.com/v1/api/',
+    YUMMLY_API_AUTH: '?_app_id={0}&_app_key={1}',
+    YUMMLY_API_SEARCH: 'recipes',
+    YUMMLY_API_GET: 'recipe/',
     YUMMLY_API_ID: 'e4d75399',
     YUMMLY_API_KEY: '670a6497e397e2f8837a536ce46019ea',
     SNOOTH_API_URL: 'http://api.snooth.com/wines/?akey=',
@@ -22,9 +25,10 @@ app.main = {
     canvasModule: null,
 
     init: function() {
-        var that = this;
+        var self = this;
 
-        console.log(this.canvasModule);
+        $('body').fadeIn();
+
         this.canvasModule.init();
 
         var foods = $('#foodRow').children();
@@ -33,10 +37,10 @@ app.main = {
                 var foodValue = $(this).attr('value');
                 $('#modalHeading').text(foodValue + ' Recipes');
 
-                that.getRecipe(foodValue);
+                self.getRecipe(foodValue);
 
-                that.selectedItem = this;
-                that.showModal();
+                self.selectedItem = this;
+                self.showModal();
             });
         });
 
@@ -46,21 +50,21 @@ app.main = {
                 var varietalValue = $(this).attr('value');
                 $('#modalHeading').text(varietalValue);
 
-                that.getWine(varietalValue);
+                self.getWine(varietalValue);
 
-                that.selectedItem = $(this).parent().parent();
-                that.showModal();
+                self.selectedItem = $(this).parent().parent();
+                self.showModal();
             });           
         });
 
         $('#backdrop').click(function() {
-            that.hideModal();
+            self.hideModal();
         });
 
         $(window).resize(function() {
-            if (that.currentModal && that.selectedItem) {
-                that.displaySelectedItem();
-                that.positionModal();
+            if (self.currentModal && self.selectedItem) {
+                self.displaySelectedItem();
+                self.positionModal();
             }
         });
     },
@@ -123,13 +127,14 @@ app.main = {
     },
 
     getRecipe: function(searchTerm) {
-        var url = String.format(
-            this.YUMMLY_API_URL,
+        var url = this.YUMMLY_API_URL + this.YUMMLY_API_SEARCH;
+        url += String.format(
+            this.YUMMLY_API_AUTH,
             this.YUMMLY_API_ID,
             this.YUMMLY_API_KEY
         );
 
-        this.getData(url, searchTerm, this.recipeLoaded.bind(this));
+        this.getData(url, searchTerm, this.recipesLoaded.bind(this));
     },
 
     getWine: function(searchTerm) {
@@ -139,17 +144,77 @@ app.main = {
     },
 
     getData: function(url, searchTerm, callback) {
-        url += '&q=' + encodeURI(searchTerm);
+        if (searchTerm) {
+            url += '&q=' + encodeURI(searchTerm);
+        }
 
         $.ajax({
             dataType: 'json',
+            async: false,
             url: url,
             data: null,
             success: callback,
         });
     },
 
-    populateModalResult: function(imageUrl, link, title, section1, section2) {
+    winesLoaded: function(response) {
+        var wines = response.wines;
+        var self = this;
+
+        $.each(wines, function(index, wine) {
+            var imageUrl = wine.image ? wine.image : null;
+            var link = wine.link;
+            var title = wine.name;
+            var section1 = '$' + wine.price + ' ' + wine.region;
+            var section2 = wine.varietal;
+
+            var resultElement = self.populateModalResult(
+                null, imageUrl, link, title, section1, section2
+            );
+
+            $(resultElement).click(function() {
+                console.log('hallo');
+            });
+        });
+    },
+
+    recipesLoaded: function(response) {
+        var recipes = response.matches;
+        var self = this;
+
+        // create result element
+        $.each(recipes, function(index, recipe) {
+            var id = recipe.id;
+
+            var imageUrl;
+            if (recipe.smallImageUrls.length > 0) {
+                imageUrl = recipe.smallImageUrls[0];
+            }
+
+            var title = recipe.recipeName;
+
+            var section1 = String.format(
+                '{0} Ingredients. {1} Minutes',
+                recipe.ingredients.length,
+                recipe.totalTimeInSeconds / 60
+            );
+
+            var section2 = recipe.ingredients.join(', ');
+
+            self.populateModalResult(
+                id, imageUrl, null, title, section1, section2
+            );
+        });
+    },
+
+    recipeLoaded: function(response) {
+        var recipeUrl = response.source.sourceRecipeUrl;
+        if (recipeUrl) {
+            window.open(recipeUrl, '_blank');
+        }
+    },
+
+    populateModalResult: function(id, imageUrl, link, title, section1, section2) {
         var resultElement = document.createElement('div');
         $(resultElement).addClass('modalResult');
         
@@ -173,6 +238,8 @@ app.main = {
                 'href': link,
                 'target': '_blank'
             });
+        } else {
+            this.addClickHandler(resultLink, id);
         }
         $(resultDetail).append($(resultLink));
 
@@ -193,51 +260,18 @@ app.main = {
         return resultElement;     
     },
 
-    winesLoaded: function(response) {
-        var wines = response.wines;
-        var that = this;
+    addClickHandler: function(element, recipeId) {
+        var self = this;
+        var url = this.YUMMLY_API_URL + this.YUMMLY_API_GET + recipeId;
+        url += String.format(
+            this.YUMMLY_API_AUTH,
+            this.YUMMLY_API_ID,
+            this.YUMMLY_API_KEY
+        );
 
-        console.log(wines);
-
-        $.each(wines, function(index, wine) {
-            var imageUrl = wine.image ? wine.image : null;
-            var link = wine.link;
-            var title = wine.name;
-            var section1 = '$' + wine.price + ' ' + wine.region;
-            var section2 = wine.varietal;
-
-            var resultElement = that.populateModalResult(
-                imageUrl, link, title, section1, section2
-            );
-
-            $(resultElement).click(function() {
-                console.log('hallo');
-            });
-        });
-    },
-
-    recipeLoaded: function(response) {
-        var recipes = response.matches;
-        var that = this;
-
-        // create result element
-        $.each(recipes, function(index, recipe) {
-            var imageUrl;
-            if (recipe.smallImageUrls.length > 0) {
-                imageUrl = recipe.smallImageUrls[0];
-            }
-
-            var title = recipe.recipeName;
-
-            var section1 = String.format(
-                '{0} Ingredients. {1} Minutes',
-                recipe.ingredients.length,
-                recipe.totalTimeInSeconds / 60
-            );
-
-            var section2 = recipe.ingredients.join(', ');
-
-            that.populateModalResult(imageUrl, null, title, section1, section2);
+        $(element).click(function(e) {
+            e.preventDefault();
+            self.getData(url, null, self.recipeLoaded.bind(self));
         });
     },
 }
