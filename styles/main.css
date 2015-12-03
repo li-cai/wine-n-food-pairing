@@ -213,3 +213,13 @@ canvas {
 .resultInfo, .resultIngredients {
   opacity: 0.5;
 }
+
+#offlineModal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: coral;
+  padding: 30px;
+}

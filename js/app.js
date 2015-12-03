@@ -36,27 +36,32 @@ app.main = {
         var foods = $('#foodRow').children();
         $.each(foods, function(index, food) {
             $(food).click(function() {
-                var foodValue = $(this).attr('value');
-                $('#modalHeading').text(foodValue + ' Recipes');
+                if (!navigator.onLine) {
+                    self.showOfflineModal();
+                } else {
+                    var foodValue = $(this).attr('value');
+                    $('#modalHeading').text(foodValue + ' Recipes');
 
-                self.getRecipe(foodValue);
-
-                self.selectedItem = this;
-                self.showModal();
+                    self.selectedItem = this;
+                    self.getRecipe(foodValue);
+                }
             });
         });
 
         var varietals = $('.wineVarietals').children();
         $.each(varietals, function(index, varietal) {
             $(varietal).click(function() {
-                var varietalValue = $(this).attr('value');
-                $('#modalHeading').text(varietalValue);
+                if (!navigator.onLine) {
+                    self.showOfflineModal();
+                } else {
+                    var varietalValue = $(this).attr('value');
+                    $('#modalHeading').text(varietalValue);
 
-                self.getWine(varietalValue);
+                    self.selectedItem = $(this).parent().parent();
+                    self.selectedVarietal = this;
 
-                self.selectedItem = $(this).parent().parent();
-                self.selectedVarietal = this;
-                self.showModal();
+                    self.getWine(varietalValue);
+                }
             });           
         });
 
@@ -72,16 +77,23 @@ app.main = {
         });
     },
 
+    showOfflineModal: function() {
+        this.currentModal = '#offlineModal';
+        this.showModal();
+    },
 
-
-    showModal: function() {
+    showResultsModal: function() {
         this.currentModal = '#resultsModal';
 
         this.displaySelectedItem();
         this.positionModal();
 
+        this.showModal();
+    },
+
+    showModal: function() {
         $('#backdrop').fadeIn();
-        $('#resultsModal').fadeIn();
+        $(this.currentModal).fadeIn();
     },
 
     hideModal: function() {
@@ -178,6 +190,8 @@ app.main = {
     },
 
     getData: function(url, searchTerm, callback) {
+        var self = this;
+
         if (searchTerm) {
             url += '&q=' + encodeURI(searchTerm);
         }
@@ -188,12 +202,17 @@ app.main = {
             url: url,
             data: null,
             success: callback,
+            error: function(xhr, textStatus, error) {
+                self.showOfflineModal();
+            },
         });
     },
 
     winesLoaded: function(response) {
         var wines = response.wines;
         var self = this;
+
+        this.showResultsModal();
 
         $.each(wines, function(index, wine) {
             var imageUrl = wine.image ? wine.image : null;
@@ -217,6 +236,8 @@ app.main = {
     recipesLoaded: function(response) {
         var recipes = response.matches;
         var self = this;
+
+        this.showResultsModal();
 
         // create result element
         $.each(recipes, function(index, recipe) {
