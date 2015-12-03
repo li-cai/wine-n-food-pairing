@@ -44,6 +44,8 @@ app.main = {
 
                     self.selectedItem = this;
                     self.getRecipe(foodValue);
+
+                    self.showResultsModal();
                 }
             });
         });
@@ -61,6 +63,8 @@ app.main = {
                     self.selectedVarietal = this;
 
                     self.getWine(varietalValue);
+
+                    self.showResultsModal();
                 }
             });           
         });
@@ -74,7 +78,7 @@ app.main = {
         });
 
         $(window).resize(function() {
-            if (self.currentModal && self.selectedItem) {
+            if (self.currentModal === '#resultsModal' && self.selectedItem) {
                 self.displaySelectedItem();
                 self.positionModal();
             }
@@ -82,6 +86,9 @@ app.main = {
     },
 
     showOfflineModal: function() {
+        $('#resultsModal').hide();
+        $('#' + this.getCopyId()).hide();
+
         this.currentModal = '#offlineModal';
         this.showModal();
     },
@@ -202,7 +209,6 @@ app.main = {
 
         $.ajax({
             dataType: 'json',
-            async: false,
             url: url,
             data: null,
             success: callback,
@@ -215,8 +221,6 @@ app.main = {
     winesLoaded: function(response) {
         var wines = response.wines;
         var self = this;
-
-        this.showResultsModal();
 
         $.each(wines, function(index, wine) {
             var imageUrl = wine.image ? wine.image : null;
