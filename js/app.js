@@ -69,6 +69,14 @@ app.main = {
             });           
         });
 
+        $('.wineRowItem').each(function(index, item) {
+            $(item).hover(function() {
+                self.focusOn(this);
+            }, function() {
+                self.focusOut(this);
+            });
+        })
+
         $('#graphIcon').click(function() {
             $('canvas').fadeToggle();
         });
@@ -82,6 +90,43 @@ app.main = {
                 self.displaySelectedItem();
                 self.positionModal();
             }
+        });
+    },
+
+    focusOn: function(wine) {
+        var wineId = '#' + $(wine).attr('id');
+        this.canvasModule.setSelectedId(wineId);
+
+        $('.wineIcon').each(function(index, item) {
+            var parent = $(item).parent();
+            var parentId = '#' + $(parent).attr('id');
+
+            if (parentId !== wineId) {
+                $(parentId).addClass('faded');
+            }
+        });
+
+        var pairings = this.canvasModule.WINE_FOOD_MAP[wineId].pairings;
+        $('.foodRowItem').each(function(index, item) {
+            var itemId = '#' + $(item).attr('id');
+            if (pairings.indexOf(itemId) === -1) {
+                $(itemId).addClass('faded');
+            }
+        });
+    },
+
+    focusOut: function(wine) {
+        this.canvasModule.setSelectedId(null);
+
+        $('.wineIcon').each(function(index, item) {
+            var parent = $(item).parent();
+            var parentId = '#' + $(parent).attr('id');
+            $(parentId).removeClass('faded');
+        });
+
+        $('.foodRowItem').each(function(index, item) {
+            var itemId = '#' + $(item).attr('id');
+            $(itemId).removeClass('faded');
         });
     },
 

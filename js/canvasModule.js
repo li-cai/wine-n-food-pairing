@@ -8,6 +8,7 @@ var app = app || {};
  */
 app.canvasModule = (function() {
     var animationId = 0,
+        selectedId = null,
         WINE_FOOD_MAP = {
             '#sparkling': {
                 color: '#7eb9ab',
@@ -109,6 +110,12 @@ app.canvasModule = (function() {
                 var x2 = calculateFoodX(foodID);
                 var y2 = calculateFoodY(foodID);
 
+                if (selectedId && wineID !== selectedId) {
+                    ctx.globalAlpha = 0.1;
+                } else {
+                    ctx.globalAlpha = 1;
+                }
+
                 ctx.strokeStyle = attributes.color;
                 ctx.fillStyle = attributes.color;
 
@@ -172,7 +179,13 @@ app.canvasModule = (function() {
         return FOOD_Y_OFFSET;
     }
 
+    function setSelectedId(id) {
+        selectedId = id;
+    }
+
     return {
         init: init,
+        WINE_FOOD_MAP: WINE_FOOD_MAP,
+        setSelectedId: setSelectedId,
     };
 }());

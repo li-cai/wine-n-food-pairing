@@ -66,6 +66,15 @@ canvas {
   display: inline-block;
   position: relative;
   margin-right: 50px;
+  opacity: 1;
+}
+
+.wineRowItem, .foodRowItem {
+  transition: opacity 0.5s ease;
+}
+
+.wineRowItem.faded, .foodRowItem.faded {
+  opacity: 0.2;
 }
 
 .wineRowItem:last-child, .foodRowItem:last-child {
