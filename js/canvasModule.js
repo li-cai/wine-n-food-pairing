@@ -8,7 +8,8 @@ var app = app || {};
  */
 app.canvasModule = (function() {
     var animationId = 0,
-        selectedId = null,
+        selectedWineId = null,
+        selectedFoodId = null,
         WINE_FOOD_MAP = {
             '#sparkling': {
                 color: '#7eb9ab',
@@ -85,6 +86,64 @@ app.canvasModule = (function() {
                 ],
             },
         },
+        FOOD_WINE_MAP = {
+            '#fish': [
+                '#sparkling',
+                '#drywhite',
+                '#richwhite'
+            ],
+            '#cabbage': [
+                '#sparkling',
+                '#drywhite'
+            ],
+            '#kebab': [
+                '#drywhite',
+                '#lightred',
+                '#mediumred'
+            ],
+            '#cheese': [
+                '#sparkling',
+                '#sweetwhite',
+                '#richwhite',
+                '#mediumred'
+            ],
+            '#hardcheese': [
+                '#sparkling',
+                '#sweetwhite',
+                '#boldred'
+            ],
+            '#cupcake': [
+                '#sweetwhite',
+                '#dessertwine'
+            ],
+            '#bread': [
+                '#sparkling',
+                '#richwhite',
+                '#dessertwine',
+                '#lightred',
+                '#mediumred',
+                'boldred'
+            ],
+            '#crab': [
+                '#richwhite',
+                '#lightred'
+            ],
+            '#chicken': [
+                '#richwhite',
+                '#lightred',
+                '#mediumred'
+            ],
+            '#steak': [
+                '#mediumred',
+                '#boldred'
+            ],
+            '#salami': [
+                '#sweetwhite',
+                '#dessertwine',
+                '#mediumred',
+                '#boldred'
+            ]
+        },
         foodMap = {},
         FOOD_X_SPACING = 10,
         FOOD_X_OFFSET = 15,
@@ -110,7 +169,13 @@ app.canvasModule = (function() {
                 var x2 = calculateFoodX(foodID);
                 var y2 = calculateFoodY(foodID);
 
-                if (selectedId && wineID !== selectedId) {
+                if (selectedWineId && wineID !== selectedWineId) {
+                    ctx.globalAlpha = 0.1;
+                } else {
+                    ctx.globalAlpha = 1;
+                }
+
+                if (selectedFoodId && foodID !== selectedFoodId) {
                     ctx.globalAlpha = 0.1;
                 } else {
                     ctx.globalAlpha = 1;
@@ -179,13 +244,19 @@ app.canvasModule = (function() {
         return FOOD_Y_OFFSET;
     }
 
-    function setSelectedId(id) {
-        selectedId = id;
+    function setSelectedWineId(id) {
+        selectedWineId = id;
+    }
+
+    function setSelectedFoodId(id) {
+        selectedFoodId = id;
     }
 
     return {
         init: init,
         WINE_FOOD_MAP: WINE_FOOD_MAP,
-        setSelectedId: setSelectedId,
+        FOOD_WINE_MAP: FOOD_WINE_MAP,
+        setSelectedWineId: setSelectedWineId,
+        setSelectedFoodId: setSelectedFoodId,
     };
 }());
