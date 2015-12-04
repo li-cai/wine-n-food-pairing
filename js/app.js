@@ -144,6 +144,7 @@ app.main = {
     },
 
     focusOut: function(wine) {
+        this.canvasModule.setSelectedFoodId(null);
         this.canvasModule.setSelectedWineId(null);
 
         $('.wineIcon').each(function(index, item) {
