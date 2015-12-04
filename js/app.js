@@ -69,13 +69,21 @@ app.main = {
             });           
         });
 
-        $('.wineRowItem').each(function(index, item) {
+        $('.foodRowItem').each(function(index, item) {
             $(item).hover(function() {
-                self.focusOn(this);
+                self.focusOnFood(this);
             }, function() {
                 self.focusOut(this);
             });
-        })
+        });
+
+        $('.wineRowItem').each(function(index, item) {
+            $(item).hover(function() {
+                self.focusOnWine(this);
+            }, function() {
+                self.focusOut(this);
+            });
+        });
 
         $('#graphIcon').click(function() {
             $('canvas').fadeToggle();
@@ -93,9 +101,9 @@ app.main = {
         });
     },
 
-    focusOn: function(wine) {
+    focusOnWine: function(wine) {
         var wineId = '#' + $(wine).attr('id');
-        this.canvasModule.setSelectedId(wineId);
+        this.canvasModule.setSelectedWineId(wineId);
 
         $('.wineIcon').each(function(index, item) {
             var parent = $(item).parent();
@@ -115,8 +123,28 @@ app.main = {
         });
     },
 
+    focusOnFood: function(food) {
+        var foodId = '#' + $(food).attr('id');
+        this.canvasModule.setSelectedFoodId(foodId);
+
+        $('.foodRowItem').each(function(index, item) {
+            var itemId = '#' + $(item).attr('id');
+            if (foodId !== itemId) {
+                $(itemId).addClass('faded');
+            }
+        });
+
+        var pairings = this.canvasModule.FOOD_WINE_MAP[foodId];
+        $('.wineRowItem').each(function(index, item) {
+            var itemId = '#' + $(item).attr('id');
+            if (pairings.indexOf(itemId) === -1) {
+                $(itemId).addClass('faded');
+            }
+        });        
+    },
+
     focusOut: function(wine) {
-        this.canvasModule.setSelectedId(null);
+        this.canvasModule.setSelectedWineId(null);
 
         $('.wineIcon').each(function(index, item) {
             var parent = $(item).parent();
