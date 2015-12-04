@@ -23,18 +23,6 @@
  */
 
 @font-face {
-  font-family: 'Questa Grande';
-  src: url('fonts/2-questa_grande_regular_31-webfont.eot');
-  src: url('fonts/2-questa_grande_regular_31-webfont.eot?#iefix') format('embedded-opentype'),
-       url('fonts/2-questa_grande_regular_31-webfont.woff2') format('woff2'),
-       url('fonts/2-questa_grande_regular_31-webfont.woff') format('woff'),
-       url('fonts/2-questa_grande_regular_31-webfont.ttf') format('truetype'),
-       url('fonts/2-questa_grande_regular_31-webfont.svg#questa_granderegular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
   font-family: 'Questa';
   src: url('fonts/2-Questa_Regular-webfont.eot');
   src: url('fonts/2-Questa_Regular-webfont.eot?#iefix') format('embedded-opentype'),
