@@ -169,15 +169,11 @@ app.canvasModule = (function() {
                 var x2 = calculateFoodX(foodID);
                 var y2 = calculateFoodY(foodID);
 
-                if (selectedWineId && wineID !== selectedWineId) {
+                if (selectedWineId && wineID !== selectedWineId ||
+                    selectedFoodId && foodID !== selectedFoodId) {
                     ctx.globalAlpha = 0.1;
-                } else {
-                    ctx.globalAlpha = 1;
                 }
-
-                if (selectedFoodId && foodID !== selectedFoodId) {
-                    ctx.globalAlpha = 0.1;
-                } else {
+                else {
                     ctx.globalAlpha = 1;
                 }
 
